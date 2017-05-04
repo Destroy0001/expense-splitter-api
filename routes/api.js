@@ -1,6 +1,8 @@
 import express from 'express';
 import logger from 'morgan';
-import db from '../models/index';
+import db from '../models';
+import errors from '../constants/errors';
+import md5 from 'md5';
 
 const router = express.Router();
 
@@ -16,13 +18,25 @@ const router = express.Router();
 	{
 		name: TestName
 	}
-
- */
+*/
 router.post('/login/', (req, res, next) => {
+	let email = req.body.email;
+	let pass = req.body.pass;
+	if(!email || !pass){
+		let error = errors.INVALID_LOGIN;
+		return res.status(error.status)
+					.send(error.message);
+	}
 
-
+	db.Users.findOne({where:{email:email,password:md5(pass)}})
+		.then(user=>{
+			return res.send(JSON.stringify({success:true}));
+		}).catch(err=>{
+			console.log(err);
+			return res.status(errors.SERVER_ERROR.status)
+						.send(errors.SERVER_ERROR.message);
+		});
 });
-
 
 /* 
 registers a new user 
@@ -36,7 +50,46 @@ registers a new user
 */
 router.post('/register/', (req, res, next) => {
 
+	let email = req.body.email;
+	let pass = req.body.pass;
+	let name = req.body.name;
+	if(!email || !pass || !name){
+		let error = errors.MISSING_VALUES;
+		return res.status(error.status)
+					.send(error.message);
+	}
 
+	/*checking if the emails exists */
+	db.Users.findOne({where:{email:email}}).then(user => {
+		/*if it does, return an error*/
+		if(user){
+			let error = errors.USER_ALREADY_EXISTS;
+			return res.status(error.status)
+						.send(error.message);
+		}
 
+		/*if it doesn't, create new user */
+		db.Users.create({
+				name:name,
+				email:email,
+				password: md5(pass)
+			})
+			.then(user => {
+				return res.send(JSON.stringify({success:true}));
+			})
+			.catch(err => {
+				console.log(err);
+				let error = errors.SERVER_ERROR;
+				return res.status(error.status)
+						.send(error.message);
+			});
+
+		}).catch(err =>{
+					console.log(err);
+					let error = errors.SERVER_ERROR;
+					return res.status(error.status)
+							.send(error.message);
+		});
 });
+
 export default router;

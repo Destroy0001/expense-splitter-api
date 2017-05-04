@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 export default (sequelize, DataTypes) =>{
-	return sequelize.define('users', {
+	return sequelize.define('Users', {
 		id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,

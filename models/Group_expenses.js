@@ -1,30 +1,30 @@
 /* jshint indent: 2 */
 
 export default (sequelize, DataTypes) =>{
-	return sequelize.define('user_contacts', {
+	return sequelize.define('Group_expenses', {
 		id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		contact_name: {
-			type: DataTypes.STRING(50),
-			allowNull: false
-		},
-		user_id: {
+		group_id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			references: {
-				model: 'users',
+				model: 'groups',
 				key: 'id'
 			}
 		},
-		contact_id: {
+		amount: {
+			type: DataTypes.DECIMAL,
+			allowNull: false
+		},
+		added_by: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			references: {
-				model: 'users',
+				model: 'group_users',
 				key: 'id'
 			}
 		},
@@ -35,14 +35,15 @@ export default (sequelize, DataTypes) =>{
 		},
 		updated: {
 			type: DataTypes.TIME,
-			allowNull: true,
+			allowNull: false,
 			defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
 		},
-		removed: {
+		deleted: {
 			type: DataTypes.INTEGER(1),
-			allowNull: true
+			allowNull: true,
+			defaultValue: '0'
 		}
 	}, {
-		tableName: 'user_contacts'
+		tableName: 'group_expenses'
 	});
 };

@@ -1,22 +1,26 @@
 /* jshint indent: 2 */
 
 export default (sequelize, DataTypes) =>{
-	return sequelize.define('group_users', {
+	return sequelize.define('User_contacts', {
 		id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		group_id: {
+		contact_name: {
+			type: DataTypes.STRING(50),
+			allowNull: false
+		},
+		user_id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			references: {
-				model: 'groups',
+				model: 'users',
 				key: 'id'
 			}
 		},
-		user_id: {
+		contact_id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			references: {
@@ -31,15 +35,14 @@ export default (sequelize, DataTypes) =>{
 		},
 		updated: {
 			type: DataTypes.TIME,
-			allowNull: false,
+			allowNull: true,
 			defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
 		},
-		deleted: {
+		removed: {
 			type: DataTypes.INTEGER(1),
-			allowNull: true,
-			defaultValue: '0'
+			allowNull: true
 		}
 	}, {
-		tableName: 'group_users'
+		tableName: 'user_contacts'
 	});
 };

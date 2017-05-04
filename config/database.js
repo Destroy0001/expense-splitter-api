@@ -14,6 +14,13 @@ export default {
 			min: 0,
 			idle: 10000
 		},
+
+		define: {
+			underscored: false,
+			freezeTableName: false,
+			syncOnAssociation: true,
+			timestamps: false,
+		},
 	}
 
 };

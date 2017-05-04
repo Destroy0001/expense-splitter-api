@@ -2,10 +2,10 @@ import express from 'express';
 import path from 'path';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
-
 import api from './routes/api';
 
 const app = express();
+app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -21,13 +21,13 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+	console.log(err);
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
 	// render the error page
-	res.status(err.status || 500);
-	res.render('error');
+	res.sendStatus(err.status || 500);
 });
 
 export default app;

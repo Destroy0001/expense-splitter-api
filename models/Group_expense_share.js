@@ -1,24 +1,37 @@
 /* jshint indent: 2 */
 
 export default (sequelize, DataTypes) =>{
-	return sequelize.define('groups', {
+	return sequelize.define('Group_expense_share', {
 		id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		name: {
-			type: DataTypes.STRING(100),
-			allowNull: false
-		},
-		admin: {
+		expense_id: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 			references: {
-				model: 'users',
+				model: 'group_expenses',
 				key: 'id'
 			}
+		},
+		user: {
+			type: DataTypes.BIGINT,
+			allowNull: false,
+			references: {
+				model: 'group_users',
+				key: 'id'
+			}
+		},
+		share: {
+			type: DataTypes.DECIMAL,
+			allowNull: false
+		},
+		paid: {
+			type: DataTypes.DECIMAL,
+			allowNull: false,
+			defaultValue: '0.00'
 		},
 		created: {
 			type: DataTypes.TIME,
@@ -36,6 +49,6 @@ export default (sequelize, DataTypes) =>{
 			defaultValue: '0'
 		}
 	}, {
-		tableName: 'groups'
+		tableName: 'group_expense_share'
 	});
 };
