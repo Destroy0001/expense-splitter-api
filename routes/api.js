@@ -11,7 +11,7 @@ const router = express.Router();
 
  POST api/login/ 
 	- email
-	- password
+	- pass
 
  RESPONSE:
 	200 OK, 
