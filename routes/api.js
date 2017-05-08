@@ -30,11 +30,23 @@ router.post('/login/', (req, res, next) => {
 
 	db.Users.findOne({where:{email:email,password:md5(pass)}})
 		.then(user=>{
-			return res.send(JSON.stringify({success:true}));
+
+			/*if user doesn't exists, return error */
+			if(!user){
+				let error = errors.INVALID_LOGIN;
+				return res.status(error.status)
+						.send(error.message);
+			}
+
+			/*else return success*/
+			return res.send(JSON.stringify({success:true,name:user.name,email:user.email}));
+			
 		}).catch(err=>{
 			console.log(err);
-			return res.status(errors.SERVER_ERROR.status)
-						.send(errors.SERVER_ERROR.message);
+
+			let error = errors.SERVER_ERROR;
+			return res.status(error.status)
+						.send(error.message);
 		});
 });
 
@@ -60,36 +72,36 @@ router.post('/register/', (req, res, next) => {
 	}
 
 	/*checking if the emails exists */
-	db.Users.findOne({where:{email:email}}).then(user => {
-		/*if it does, return an error*/
-		if(user){
-			let error = errors.USER_ALREADY_EXISTS;
-			return res.status(error.status)
-						.send(error.message);
-		}
-
-		/*if it doesn't, create new user */
-		db.Users.create({
-				name:name,
-				email:email,
-				password: md5(pass)
-			})
+	db.Users.findOne({where:{email:email}})
 			.then(user => {
-				return res.send(JSON.stringify({success:true}));
-			})
-			.catch(err => {
-				console.log(err);
-				let error = errors.SERVER_ERROR;
-				return res.status(error.status)
-						.send(error.message);
-			});
-
-		}).catch(err =>{
-					console.log(err);
-					let error = errors.SERVER_ERROR;
+				/*if it does, return an error*/
+				if(user){
+					let error = errors.USER_ALREADY_EXISTS;
 					return res.status(error.status)
-							.send(error.message);
-		});
+								.send(error.message);
+				}
+				/*if it doesn't, create new user */
+				db.Users.create({
+						name:name,
+						email:email,
+						password: md5(pass)
+					})
+					.then(user => {
+						return res.send(JSON.stringify({success:true,name:user.name,email:user.email}));
+					})
+					.catch(err => {
+						console.log(err);
+						let error = errors.SERVER_ERROR;
+						return res.status(error.status)
+								.send(error.message);
+					});
+
+			}).catch(err =>{
+						console.log(err);
+						let error = errors.SERVER_ERROR;
+						return res.status(error.status)
+								.send(error.message);
+			});
 });
 
 export default router;
