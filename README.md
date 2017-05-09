@@ -13,6 +13,7 @@ PORT=3001
 ```
 - install sequelize-cli (`sudo npm install -g sequelize-cli`)
 - generate a base migrations file by going through the instructions here (http://docs.sequelizejs.com/en/1.7.0/docs/migrations/) 
+(alternatively if you can import the tables to the db using `database_init.sql`)
 if you need a config.json file, create one from the json exported in `config/database.js` 
 - do `npm start` to run the server on forever, or `npm run debug-start` to run the server on nodemon. 
 
