@@ -15,9 +15,7 @@ const router = express.Router();
 
  RESPONSE:
 	200 OK, 
-	{
-		name: TestName
-	}
+	{success:true,name:user.name,email:user.email}
 */
 router.post('/login/', (req, res, next) => {
 	let email = req.body.email;
@@ -58,7 +56,8 @@ registers a new user
 	- name
 	- password
  RESPONSE
-	200 OK
+ 	200 OK
+	{success:true,name:user.name,email:user.email}
 */
 router.post('/register/', (req, res, next) => {
 
